@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#fafaf9" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0c0a09" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Madera">
+<meta name="format-detection" content="telephone=no">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-180.png">
+<link rel="icon" href="icon-180.png">
+<link rel="stylesheet" href="style.css">
+<title>Madera 17–24.10</title>
+</head>
+<body>
+
+<div id="install" class="install" hidden>
+  <span>Aby działać offline: <b>Udostępnij</b> → <b>Do ekranu początkowego</b></span>
+  <button id="installClose" aria-label="Zamknij">✕</button>
+</div>
+
+<main>
+  <!-- PLAN -->
+  <section id="view-plan" class="view active">
+    <header class="top">
+      <div>
+        <p class="eyebrow">17 – 24 października 2026</p>
+        <h1>Madera</h1>
+      </div>
+      <button class="icon-btn" id="searchToggle" aria-label="Szukaj">
+        <svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      </button>
+    </header>
+    <div class="search" id="searchWrap" hidden>
+      <input id="searchInput" type="search" placeholder="Szukaj: parking, Fanal, PR9, tuńczyk…" autocomplete="off" autocapitalize="off">
+    </div>
+    <div class="days" id="days" role="tablist"></div>
+    <div id="dayHead" class="day-head"></div>
+    <ol id="stops" class="stops"></ol>
+  </section>
+
+  <!-- MAPA -->
+  <section id="view-map" class="view map-view">
+    <div class="map-chips days" id="mapChips"></div>
+    <canvas id="map"></canvas>
+    <div class="map-ctrl">
+      <button class="icon-btn solid" id="zoomIn" aria-label="Przybliż">+</button>
+      <button class="icon-btn solid" id="zoomOut" aria-label="Oddal">−</button>
+      <button class="icon-btn solid" id="locate" aria-label="Moja lokalizacja">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/><circle cx="12" cy="12" r="7"/></svg>
+      </button>
+    </div>
+    <div class="sheet" id="sheet" hidden></div>
+    <p class="map-note">Mapa offline · OpenStreetMap</p>
+  </section>
+
+  <!-- INFO -->
+  <section id="view-info" class="view">
+    <header class="top"><div><p class="eyebrow">Praktyka</p><h1>Info</h1></div></header>
+    <div id="guide"></div>
+  </section>
+
+  <!-- KUCHNIA -->
+  <section id="view-food" class="view">
+    <header class="top"><div><p class="eyebrow">Do spróbowania</p><h1>Kuchnia</h1></div></header>
+    <ul class="checklist" id="foodList"></ul>
+    <h2 class="section">Wino Madera</h2>
+    <div class="card">
+      <p class="muted">Blandy's Wine Lodge (Av. Arriaga 28) i Pereira D'Oliveira (Rua dos Ferreiros 107) – roczniki z banderolą IVBAM.</p>
+      <table class="wine">
+        <tr><th>Szczep</th><th>Styl</th><th>Do</th></tr>
+        <tbody id="wineRows"></tbody>
+      </table>
+      <p class="muted">Butelkę trzymaj pionowo. Otwarta zachowuje smak nawet rok.</p>
+    </div>
+  </section>
+
+  <!-- LISTA -->
+  <section id="view-list" class="view">
+    <header class="top">
+      <div><p class="eyebrow">Przed wyjazdem</p><h1>Lista</h1></div>
+      <button class="icon-btn" id="themeBtn" aria-label="Zmień motyw">
+        <svg viewBox="0 0 24 24"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      </button>
+    </header>
+    <ul class="checklist" id="prepList"></ul>
+    <h2 class="section">Linki</h2>
+    <div class="card links" id="links"></div>
+    <h2 class="section">Alarm</h2>
+    <div class="card links"><a href="tel:112"><span>Numer alarmowy</span><b>112</b></a></div>
+    <p class="muted foot" id="offlineState"></p>
+    <button class="ghost" id="resetBtn">Wyczyść postępy</button>
+  </section>
+</main>
+
+<nav class="tabbar" id="tabbar">
+  <button data-tab="plan" class="active"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M3 10h18M8 3v4M16 3v4"/></svg><span>Plan</span></button>
+  <button data-tab="map"><svg viewBox="0 0 24 24"><path d="M9 4 3 6v14l6-2 6 2 6-2V4l-6 2z"/><path d="M9 4v14M15 6v14"/></svg><span>Mapa</span></button>
+  <button data-tab="info"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.01"/></svg><span>Info</span></button>
+  <button data-tab="food"><svg viewBox="0 0 24 24"><path d="M7 3v8a2 2 0 0 0 2 2v8M11 3v8a2 2 0 0 1-2 2M17 21V3c-2 1-3 4-3 8h3"/></svg><span>Kuchnia</span></button>
+  <button data-tab="list"><svg viewBox="0 0 24 24"><path d="m4 7 2 2 3-4M4 17l2 2 3-4M13 7h7M13 17h7"/></svg><span>Lista</span></button>
+</nav>
+
+<script src="data.js"></script>
+<script src="map-data.js"></script>
+<script src="map.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
